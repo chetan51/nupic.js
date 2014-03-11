@@ -185,8 +185,10 @@ var SpatialPooler = function(params) {
     _.defaults(params, defaults);
 
     // Verify input is valid
-    numColumns = prod(params.columnDimensions);
-    numInputs = prod(params.inputDimensions);
+    var columnDimensions = toArray(params.columnDimensions),
+        inputDimensions = toArray(params.inputDimensions),
+        numColumns = prod(columnDimensions),
+        numInputs = prod(inputDimensions);
 
     assert(numColumns > 0, "numColumns should be greater than 0");
     assert(numInputs > 0, "numInputs should be greater than 0");
@@ -199,8 +201,8 @@ var SpatialPooler = function(params) {
     // Save arguments
     this._numInputs = numInputs;
     this._numColumns = numColumns;
-    this._columnDimensions = params.columnDimensions;
-    this._inputDimensions = params.inputDimensions;
+    this._columnDimensions = columnDimensions;
+    this._inputDimensions = inputDimensions;
     this._potentialRadius = Math.min(params.potentialRadius, numInputs);
     this._potentialPct = params.potentialPct;
     this._globalInhibition = params.globalInhibition;

@@ -61,6 +61,13 @@ describe('SpatialPooler', function() {
             sp.getPotentialPct().should.equal(0.3);
         });
 
+        it('should allow integer input / column dimensions', function() {
+            var sp = new SpatialPooler({ inputDimensions: 10, columnDimensions: 20 });
+            
+            sp.getNumInputs().should.equal(10);
+            sp.getNumColumns().should.equal(20);
+        });
+
         it('should allow setting and setting params', function() {
             var sp = new SpatialPooler(),
                 params = {

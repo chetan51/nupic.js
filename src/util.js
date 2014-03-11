@@ -7,3 +7,7 @@ function assert(condition, message) {
 function prod(nums) {
     return _.reduce(nums, function(p, n) { return p * n; });
 }
+
+function toArray(x) {
+    return typeof x === 'number' ? [x] : x;
+}
