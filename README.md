@@ -4,5 +4,4 @@
 
 ### Running Tests
 
-    npm install -g mocha
-    mocha
+    open test/index.html
