@@ -11,10 +11,15 @@
     <script src="mocha.js"></script>
     <script>mocha.setup('bdd');</script>
     <script src="chai.js"></script>
-    <script>chai.should();</script>
+    <script>
+      chai.Assertion.includeStack = true;
+      chai.should();
+    </script>
 
     <!-- Sources -->
     <script src="../src/lib/lodash.min.js"></script>
+    <script src="../src/lib/seedrandom.min.js"></script>
+    <script src="../src/util.js"></script>
     <script src="../src/spatial_pooler.js"></script>
 
     <!-- Tests -->

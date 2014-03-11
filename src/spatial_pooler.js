@@ -37,7 +37,7 @@
 var SpatialPooler = function(params) {
     var defaults = {
         inputDimensions: [32,32],
-        columnDimensions: (64,64),
+        columnDimensions: [64,64],
         potentialRadius: 16,
         potentialPct: 0.5,
         globalInhibition: false,
@@ -184,10 +184,279 @@ var SpatialPooler = function(params) {
     params = params || {};
     _.defaults(params, defaults);
 
+    // Verify input is valid
+    numColumns = prod(params.columnDimensions);
+    numInputs = prod(params.inputDimensions);
+
+    assert(numColumns > 0, "numColumns should be greater than 0");
+    assert(numInputs > 0, "numInputs should be greater than 0");
+    assert(params.numActiveColumnsPerInhArea > 0 ||
+           (params.localAreaDensity > 0 && params.localAreaDensity <= 0.5),
+           "numActiveColumnsPerInhArea should be greater than 0 or " +
+           "(localAreaDensity should be greater than 0 and localAreaDensity " +
+           "should be less than or equal to 0.5)");
+
     // Save arguments
+    this._numInputs = numInputs;
+    this._numColumns = numColumns;
+    this._columnDimensions = params.columnDimensions;
+    this._inputDimensions = params.inputDimensions;
+    this._potentialRadius = Math.min(params.potentialRadius, numInputs);
     this._potentialPct = params.potentialPct;
+    this._globalInhibition = params.globalInhibition;
+    this._numActiveColumnsPerInhArea = params.numActiveColumnsPerInhArea;
+    this._localAreaDensity = params.localAreaDensity;
+    this._stimulusThreshold = params.stimulusThreshold;
+    this._synPermInactiveDec = params.synPermInactiveDec;
+    this._synPermActiveInc = params.synPermActiveInc;
+    this._synPermBelowStimulusInc = params.synPermConnected / 10.0;
+    this._synPermConnected = params.synPermConnected;
+    this._minPctOverlapDutyCycles = params.minPctOverlapDutyCycle;
+    this._minPctActiveDutyCycles = params.minPctActiveDutyCycle;
+    this._dutyCyclePeriod = params.dutyCyclePeriod;
+    this._maxBoost = params.maxBoost;
+    this._spVerbosity = params.spVerbosity;
+
+    // Extra parameter settings
+    this._synPermMin = 0.0;
+    this._synPermMax = 1.0;
+    this._synPermTrimThreshold = this._synPermActiveInc / 2.0;
+    assert(this._synPermTrimThreshold < this._synPermConnected,
+           "synPermTrimThreshold should be less than synPermConnected");
+    this._updatePeriod = 50;
+
+    // Internal state
+    this._version = 1.0;
+    this._iterationNum = 0;
+    this._iterationLearnNum = 0;
+
+    // Initialize the random number generator
+    Math.seedrandom(params.seed);
+};
+
+SpatialPooler.prototype.getNumColumns = function() {
+    /* Returns the total number of columns */
+    return this._numColumns;
+};
+
+SpatialPooler.prototype.getNumInputs = function() {
+    /* Returns the total number of inputs */
+    return this._numInputs;
+};
+
+SpatialPooler.prototype.getPotentialRadius = function() {
+    /* Returns the potential radius */
+    return this._potentialRadius;
+};
+
+SpatialPooler.prototype.setPotentialRadius = function(potentialRadius) {
+    /* Sets the potential radius */
+    this._potentialRadius = potentialRadius;
 };
 
 SpatialPooler.prototype.getPotentialPct = function() {
-  return this._potentialPct;
+    /* Returns the potential percent */
+    return this._potentialPct;
+};
+
+SpatialPooler.prototype.setPotentialPct = function(potentialPct) {
+    /* Sets the potential percent */
+    this._potentialPct = potentialPct;
+};
+
+SpatialPooler.prototype.getGlobalInhibition = function() {
+    /* Returns whether global inhibition is enabled */
+    return this._globalInhibition;
+};
+
+SpatialPooler.prototype.setGlobalInhibition = function(globalInhibition) {
+    /* Sets global inhibition */
+    this._globalInhibition = globalInhibition;
+};
+
+SpatialPooler.prototype.getNumActiveColumnsPerInhArea = function() {
+    /* Returns the number of active columns per inhibition area. Returns a
+    value less than 0 if parameter is unused */
+    return this._numActiveColumnsPerInhArea;
+};
+
+SpatialPooler.prototype.setNumActiveColumnsPerInhArea = function(numActiveColumnsPerInhArea) {
+    /* Sets the number of active columns per inhibition area. Invalidates the
+    'localAreaDensity' parameter */
+    assert(numActiveColumnsPerInhArea > 0);
+    this._numActiveColumnsPerInhArea = numActiveColumnsPerInhArea;
+    this._localAreaDensity = 0;
+};
+
+SpatialPooler.prototype.getLocalAreaDensity = function() {
+    /* Returns the local area density. Returns a value less than 0 if parameter
+    is unused */
+    return this._localAreaDensity;
+};
+
+SpatialPooler.prototype.setLocalAreaDensity = function(localAreaDensity) {
+    /* Sets the local area density. Invalidates the 'numActivePerInhArea'
+    parameter */
+    assert(localAreaDensity > 0 && localAreaDensity <= 1);
+    this._localAreaDensity = localAreaDensity;
+    this._numActiveColumnsPerInhArea = 0;
+};
+
+SpatialPooler.prototype.getStimulusThreshold = function() {
+    /* Returns the stimulus threshold */
+    return this._stimulusThreshold;
+};
+
+SpatialPooler.prototype.setStimulusThreshold = function(stimulusThreshold) {
+    /* Sets the stimulus threshold */
+    this._stimulusThreshold = stimulusThreshold;
+};
+
+SpatialPooler.prototype.getInhibitionRadius = function() {
+    /* Returns the inhibition radius */
+    return this._inhibitionRadius;
+};
+
+SpatialPooler.prototype.setInhibitionRadius = function(inhibitionRadius) {
+    /* Sets the inhibition radius */
+    this._inhibitionRadius = inhibitionRadius;
+};
+
+SpatialPooler.prototype.getDutyCyclePeriod = function() {
+    /* Returns the duty cycle period */
+    return this._dutyCyclePeriod;
+};
+
+SpatialPooler.prototype.setDutyCyclePeriod = function(dutyCyclePeriod) {
+    /* Sets the duty cycle period */
+    this._dutyCyclePeriod = dutyCyclePeriod;
+};
+
+SpatialPooler.prototype.getMaxBoost = function() {
+    /* Returns the maximum boost value */
+    return this._maxBoost;
+};
+
+SpatialPooler.prototype.setMaxBoost = function(maxBoost) {
+    /* Sets the maximum boost value */
+    this._maxBoost = maxBoost;
+};
+
+SpatialPooler.prototype.getIterationNum = function() {
+    /* Returns the iteration number */
+    return this._iterationNum;
+};
+
+SpatialPooler.prototype.setIterationNum = function(iterationNum) {
+    /* Sets the iteration number */
+    this._iterationNum = iterationNum;
+};
+
+SpatialPooler.prototype.getIterationLearnNum = function() {
+    /* Returns the learning iteration number */
+    return this._iterationLearnNum;
+};
+
+SpatialPooler.prototype.setIterationLearnNum = function(iterationLearnNum) {
+    /* Sets the learning iteration number */
+    this._iterationLearnNum = iterationLearnNum;
+};
+
+SpatialPooler.prototype.getSpVerbosity = function() {
+    /* Returns the verbosity level */
+    return this._spVerbosity;
+};
+
+SpatialPooler.prototype.setSpVerbosity = function(spVerbosity) {
+    /* Sets the verbosity level */
+    this._spVerbosity = spVerbosity;
+};
+
+SpatialPooler.prototype.getUpdatePeriod = function() {
+    /* Returns the update period */
+    return this._updatePeriod;
+};
+
+SpatialPooler.prototype.setUpdatePeriod = function(updatePeriod) {
+    /* Sets the update period */
+    this._updatePeriod = updatePeriod;
+};
+
+SpatialPooler.prototype.getSynPermTrimThreshold = function() {
+    /* Returns the permanence trim threshold */
+    return this._synPermTrimThreshold;
+};
+
+SpatialPooler.prototype.setSynPermTrimThreshold = function(synPermTrimThreshold) {
+    /* Sets the permanence trim threshold */
+    this._synPermTrimThreshold = synPermTrimThreshold;
+};
+
+SpatialPooler.prototype.getSynPermActiveInc = function() {
+    /* Returns the permanence increment amount for active synapses
+    inputs */
+    return this._synPermActiveInc;
+};
+
+SpatialPooler.prototype.setSynPermActiveInc = function(synPermActiveInc) {
+    /* Sets the permanence increment amount for active synapses */
+    this._synPermActiveInc = synPermActiveInc;
+};
+
+SpatialPooler.prototype.getSynPermInactiveDec = function() {
+    /* Returns the permanence decrement amount for inactive synapses */
+    return this._synPermInactiveDec;
+};
+
+SpatialPooler.prototype.setSynPermInactiveDec = function(synPermInactiveDec) {
+    /* Sets the permanence decrement amount for inactive synapses */
+    this._synPermInactiveDec = synPermInactiveDec;
+};
+
+SpatialPooler.prototype.getSynPermBelowStimulusInc = function() {
+    /* Returns the permanence increment amount for columns that have not been
+    recently active  */
+    return this._synPermBelowStimulusInc;
+};
+
+SpatialPooler.prototype.setSynPermBelowStimulusInc = function(synPermBelowStimulusInc) {
+    /* Sets the permanence increment amount for columns that have not been
+    recently active  */
+    this._synPermBelowStimulusInc = synPermBelowStimulusInc;
+};
+
+SpatialPooler.prototype.getSynPermConnected = function() {
+    /* Returns the permanence amount that qualifies a synapse as
+    being connected */
+    return this._synPermConnected;
+};
+
+SpatialPooler.prototype.setSynPermConnected = function(synPermConnected) {
+    /* Sets the permanence amount that qualifies a synapse as being
+    connected */
+    this._synPermConnected = synPermConnected;
+};
+
+SpatialPooler.prototype.getMinPctOverlapDutyCycles = function() {
+    /* Returns the minimum tolerated overlaps, given as percent of
+    neighbors overlap score */
+    return this._minPctOverlapDutyCycles;
+};
+
+SpatialPooler.prototype.setMinPctOverlapDutyCycles = function(minPctOverlapDutyCycles) {
+    /* Sets the minimum tolerated activity duty cycle, given as percent of
+    neighbors' activity duty cycle */
+    this._minPctOverlapDutyCycles = minPctOverlapDutyCycles;
+};
+
+SpatialPooler.prototype.getMinPctActiveDutyCycles = function() {
+    /* Returns the minimum tolerated activity duty cycle, given as percent of
+    neighbors' activity duty cycle */
+    return this._minPctActiveDutyCycles;
+};
+
+SpatialPooler.prototype.setMinPctActiveDutyCycles = function(minPctActiveDutyCycles) {
+    /* Sets the minimum tolerated activity duty, given as percent of
+    neighbors' activity duty cycle */
+    this._minPctActiveDutyCycles = minPctActiveDutyCycles;
 };
