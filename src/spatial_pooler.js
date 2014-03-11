@@ -283,7 +283,8 @@ SpatialPooler.prototype.getNumActiveColumnsPerInhArea = function() {
 SpatialPooler.prototype.setNumActiveColumnsPerInhArea = function(numActiveColumnsPerInhArea) {
     /* Sets the number of active columns per inhibition area. Invalidates the
     'localAreaDensity' parameter */
-    assert(numActiveColumnsPerInhArea > 0);
+    assert(numActiveColumnsPerInhArea > 0,
+           "numActiveColumnsPerInhArea should be greater than 0");
     this._numActiveColumnsPerInhArea = numActiveColumnsPerInhArea;
     this._localAreaDensity = 0;
 };
@@ -297,7 +298,9 @@ SpatialPooler.prototype.getLocalAreaDensity = function() {
 SpatialPooler.prototype.setLocalAreaDensity = function(localAreaDensity) {
     /* Sets the local area density. Invalidates the 'numActivePerInhArea'
     parameter */
-    assert(localAreaDensity > 0 && localAreaDensity <= 1);
+    assert(localAreaDensity > 0 && localAreaDensity <= 1,
+           "localAreaDensity should be greater than 0 or " +
+           "localAreaDensity should be less than or equal to 1");
     this._localAreaDensity = localAreaDensity;
     this._numActiveColumnsPerInhArea = 0;
 };
