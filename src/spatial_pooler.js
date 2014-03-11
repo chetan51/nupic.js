@@ -463,3 +463,37 @@ SpatialPooler.prototype.setMinPctActiveDutyCycles = function(minPctActiveDutyCyc
     neighbors' activity duty cycle */
     this._minPctActiveDutyCycles = minPctActiveDutyCycles;
 };
+
+SpatialPooler.prototype._mapPotential = function(index, wrapAround) {
+    wrapAround = wrapAround || false;
+    /*
+    Maps a column to its input bits. This method encapsultes the topology of
+    the region. It takes the index of the column as an argument and determines
+    what are the indices of the input vector that are located within the
+    column's potential pool. The return value is a list containing the indices
+    of the input bits. The current implementation of the base class only
+    supports a 1 dimensional topology of columsn with a 1 dimensional topology
+    of inputs. To extend this class to support 2-D topology you will need to
+    override this method. Examples of the expected output of this method:
+    * If the potentialRadius is greater than or equal to the entire input
+      space, (global visibility), then this method returns an array filled with
+      all the indices
+    * If the topology is one dimensional, and the potentialRadius is 5, this
+      method will return an array containing 5 consecutive values centered on
+      the index of the column (wrapping around if necessary).
+    * If the topology is two dimensional (not implemented), and the
+      potentialRadius is 5, the method should return an array containing 25
+      '1's, where the exact indices are to be determined by the mapping from
+      1-D index to 2-D position.
+
+    Parameters:
+    ----------------------------
+    index:          The index identifying a column in the permanence, potential
+                    and connectivity matrices.
+    wrapAround:     A boolean value indicating that boundaries should be
+                    region boundaries ignored.
+    */
+
+    var mask = [];
+    return mask;
+};

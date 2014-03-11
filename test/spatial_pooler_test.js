@@ -150,4 +150,18 @@ describe('SpatialPooler', function() {
 
     });
 
+    describe('mapPotential', function() {
+
+        it('should work without wrapAround', function() {
+            var sp = new SpatialPooler({
+                    inputDimensions: [4,4],
+                    columnDimensions: [8,8],
+                }),
+                mask = sp._mapPotential(0, false);
+
+            mask.should.eql([]);
+        });
+
+    });
+
 });
