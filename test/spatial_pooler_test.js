@@ -56,13 +56,18 @@ describe('SpatialPooler', function() {
         });
 
         it('should allow overriding default params', function() {
-            var sp = new SpatialPooler({ potentialPct: 0.3 });
+            var sp = new SpatialPooler({
+                potentialPct: 0.3
+            });
 
             sp.getPotentialPct().should.equal(0.3);
         });
 
         it('should allow integer input / column dimensions', function() {
-            var sp = new SpatialPooler({ inputDimensions: 10, columnDimensions: 20 });
+            var sp = new SpatialPooler({
+                inputDimensions: 10,
+                columnDimensions: 20
+            });
             
             sp.getNumInputs().should.equal(10);
             sp.getNumColumns().should.equal(20);
@@ -161,12 +166,66 @@ describe('SpatialPooler', function() {
 
         it('should work without wrapAround', function() {
             var sp = new SpatialPooler({
-                    inputDimensions: [4,4],
-                    columnDimensions: [8,8],
+                    columnDimensions: 4,
+                    inputDimensions: 10,
+                    potentialRadius: 2,
+                    potentialPct: 1
                 }),
-                mask = sp._mapPotential(0, false);
+                mask;
 
-            mask.should.eql([]);
+            mask = sp._mapPotential(0, false);
+            mask.should.eql([1,1,1,0,0,0,0,0,0,0]);
+
+            mask = sp._mapPotential(2, false);
+            mask.should.eql([0,0,1,1,1,1,1,0,0,0]);
+        });
+
+        it('should work with wrapAround', function() {
+            var sp = new SpatialPooler({
+                    columnDimensions: 4,
+                    inputDimensions: 10,
+                    potentialRadius: 2,
+                    potentialPct: 1
+                }),
+                mask;
+
+            mask = sp._mapPotential(0, false);
+            mask.should.eql([1,1,1,0,0,0,0,0,1,1]);
+            
+            mask = sp._mapPotential(2, false);
+            mask.should.eql([0,0,0,1,1,1,1,1,0,0]);
+        });
+
+    });
+
+    describe('mapColumnIndex', function() {
+
+        it('should work for 1D columns to 1D inputs', function() {
+            var sp = new SpatialPooler({
+                    columnDimensions: 4,
+                    inputDimensions: 10
+                }),
+                mask;
+
+            sp._mapColumnIndex(0).should.equal(0);
+            sp._mapColumnIndex(1).should.equal(2);
+            sp._mapColumnIndex(2).should.equal(5);
+            sp._mapColumnIndex(3).should.equal(7);
+            sp._mapColumnIndex(4).should.equal(10);
+        });
+
+        it('should work for 2D columns to 2D inputs', function() {
+            var sp = new SpatialPooler({
+                    columnDimensions: [4, 12],
+                    inputDimensions: [10, 20]
+                }),
+                mask;
+
+            sp._mapColumnIndex(0).should.equal(0);
+            sp._mapColumnIndex(4).should.equal(10);
+            sp._mapColumnIndex(5).should.equal(12);
+            sp._mapColumnIndex(7).should.equal(19);
+            sp._mapColumnIndex(47).should.equal(199);
         });
 
     });

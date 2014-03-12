@@ -473,20 +473,16 @@ SpatialPooler.prototype._mapPotential = function(index, wrapAround) {
     the region. It takes the index of the column as an argument and determines
     what are the indices of the input vector that are located within the
     column's potential pool. The return value is a list containing the indices
-    of the input bits. The current implementation of the base class only
-    supports a 1 dimensional topology of columsn with a 1 dimensional topology
-    of inputs. To extend this class to support 2-D topology you will need to
-    override this method. Examples of the expected output of this method:
+    of the input bits. Examples of the expected output of this method:
     * If the potentialRadius is greater than or equal to the entire input
       space, (global visibility), then this method returns an array filled with
       all the indices
     * If the topology is one dimensional, and the potentialRadius is 5, this
       method will return an array containing 5 consecutive values centered on
       the index of the column (wrapping around if necessary).
-    * If the topology is two dimensional (not implemented), and the
-      potentialRadius is 5, the method should return an array containing 25
-      '1's, where the exact indices are to be determined by the mapping from
-      1-D index to 2-D position.
+    * If the topology is two dimensional, and the potentialRadius is 5, the
+      method should return an array containing 25 '1's, where the exact indices
+      are to be determined by the mapping from 1-D index to 2-D position.
 
     Parameters:
     ----------------------------
@@ -498,4 +494,28 @@ SpatialPooler.prototype._mapPotential = function(index, wrapAround) {
 
     var mask = [];
     return mask;
+};
+
+SpatialPooler.prototype._mapColumnIndex = function(index) {
+    /*
+    Maps a column to its respective input index, keeping to the topology of
+    the region. It takes the index of the column as an argument and determines
+    what is the index of the flattened input vector that is to be the center of
+    the column's potential pool. It distributes the columns over the inputs
+    uniformly. The return value is an integer representing the index of the
+    input bit. Examples of the expected output of this method:
+    * If the topology is one dimensional, and the column index is 0, this
+      method will return the input index 0. If the column index is 5, and there
+      are 10 columns over 50 inputs, this method will return the input index 25.
+    * If the topology is two dimensional, with column dimensions [10, 20] and
+      input dimensions [50, 100], and the column index is 100, the method
+      returns input index 2500.
+
+    Parameters:
+    ----------------------------
+    index:          The index identifying a column in the permanence, potential
+                    and connectivity matrices.
+    */
+
+    return -1;
 };
