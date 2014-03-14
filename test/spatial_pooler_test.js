@@ -164,7 +164,7 @@ describe('SpatialPooler', function() {
 
     describe('mapPotential', function() {
 
-        it('should work without wrapAround', function() {
+        describe('for 1-D columns and inputs', function() {
             var sp = new SpatialPooler({
                     columnDimensions: 4,
                     inputDimensions: 10,
@@ -173,27 +173,22 @@ describe('SpatialPooler', function() {
                 }),
                 mask;
 
-            mask = sp._mapPotential(0, false);
-            mask.should.eql([1,1,1,0,0,0,0,0,0,0]);
+            it('should work without wrapAround', function() {
+                mask = sp._mapPotential(0, false);
+                mask.should.eql([1,1,1,0,0,0,0,0,0,0]);
 
-            mask = sp._mapPotential(2, false);
-            mask.should.eql([0,0,0,0,1,1,1,1,1,0]);
-        });
+                mask = sp._mapPotential(2, false);
+                mask.should.eql([0,0,0,0,1,1,1,1,1,0]);
+            });
 
-        it('should work with wrapAround', function() {
-            var sp = new SpatialPooler({
-                    columnDimensions: 4,
-                    inputDimensions: 10,
-                    potentialRadius: 2,
-                    potentialPct: 1
-                }),
-                mask;
+            it('should work with wrapAround', function() {
+                mask = sp._mapPotential(0, false);
+                mask.should.eql([1,1,1,0,0,0,0,0,1,1]);
+                
+                mask = sp._mapPotential(3, false);
+                mask.should.eql([1,0,0,0,0,0,1,1,1,1]);
+            });
 
-            mask = sp._mapPotential(0, false);
-            mask.should.eql([1,1,1,0,0,0,0,0,1,1]);
-            
-            mask = sp._mapPotential(3, false);
-            mask.should.eql([1,0,0,0,0,0,1,1,1,1]);
         });
 
     });
