@@ -177,7 +177,7 @@ describe('SpatialPooler', function() {
             mask.should.eql([1,1,1,0,0,0,0,0,0,0]);
 
             mask = sp._mapPotential(2, false);
-            mask.should.eql([0,0,1,1,1,1,1,0,0,0]);
+            mask.should.eql([0,0,0,0,1,1,1,1,1,0]);
         });
 
         it('should work with wrapAround', function() {
@@ -192,8 +192,8 @@ describe('SpatialPooler', function() {
             mask = sp._mapPotential(0, false);
             mask.should.eql([1,1,1,0,0,0,0,0,1,1]);
             
-            mask = sp._mapPotential(2, false);
-            mask.should.eql([0,0,0,1,1,1,1,1,0,0]);
+            mask = sp._mapPotential(3, false);
+            mask.should.eql([1,0,0,0,0,0,1,1,1,1]);
         });
 
     });
