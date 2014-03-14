@@ -240,6 +240,34 @@ describe('SpatialPooler', function() {
             sp._mapColumnIndex(47).should.equal(199);
         });
 
+        it('should work for 3D columns to 2D inputs', function() {
+            var sp = new SpatialPooler({
+                    columnDimensions: [12, 2, 2],
+                    inputDimensions: [20, 10]
+                }),
+                mask;
+
+            sp._mapColumnIndex(0).should.equal(0);
+            sp._mapColumnIndex(4).should.equal(10);
+            sp._mapColumnIndex(5).should.equal(13);
+            sp._mapColumnIndex(7).should.equal(19);
+            sp._mapColumnIndex(47).should.equal(199);
+        });
+
+        it('should work for 2D columns to 3D inputs', function() {
+            var sp = new SpatialPooler({
+                    columnDimensions: [12, 4],
+                    inputDimensions: [20, 5, 2]
+                }),
+                mask;
+
+            sp._mapColumnIndex(0).should.equal(0);
+            sp._mapColumnIndex(4).should.equal(10);
+            sp._mapColumnIndex(5).should.equal(13);
+            sp._mapColumnIndex(7).should.equal(19);
+            sp._mapColumnIndex(47).should.equal(199);
+        });
+
     });
 
 });

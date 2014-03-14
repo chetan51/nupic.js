@@ -519,13 +519,16 @@ SpatialPooler.prototype._mapColumnIndex = function(index) {
 
     var columnDimensions = this._columnDimensions,
         inputDimensions = this._inputDimensions,
-        columnPoint = Arr.indexToPoint(index, columnDimensions),
+        minNumDimensions = Math.min(columnDimensions.length, inputDimensions.length),
+        normColumnDimensions = Arr.reduceDimensions(columnDimensions, minNumDimensions),
+        normInputDimensions = Arr.reduceDimensions(inputDimensions, minNumDimensions),
+        columnPoint = Arr.indexToPoint(index, normColumnDimensions),
         ratios = _.map(columnPoint, function(p, i) {
-          return p / (columnDimensions[i] - 1);
+          return p / (normColumnDimensions[i] - 1);
         });
-        inputPoint = _.map(inputDimensions, function(p, i) {
+        inputPoint = _.map(normInputDimensions, function(p, i) {
           return Math.floor((p - 1) * ratios[i]);
         });
 
-    return Arr.pointToIndex(inputPoint, inputDimensions);
+    return Arr.pointToIndex(inputPoint, normInputDimensions);
 };
