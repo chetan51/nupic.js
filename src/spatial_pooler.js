@@ -481,8 +481,8 @@ SpatialPooler.prototype._mapPotential = function(index, wrapAround) {
       method will return an array containing 5 consecutive values centered on
       the index of the column (wrapping around if necessary).
     * If the topology is two dimensional, and the potentialRadius is 5, the
-      method should return an array containing 25 '1's, where the exact indices
-      are to be determined by the mapping from 1-D index to 2-D position.
+      method should return an array containing 25 indices, which are to be
+      determined by the mapping from 1-D index to 2-D position.
 
     Parameters:
     ----------------------------
