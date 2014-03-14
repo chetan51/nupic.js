@@ -486,10 +486,12 @@ SpatialPooler.prototype._mapPotential = function(index, wrapAround) {
     wrapAround:     A boolean value indicating that boundaries should be
                     region boundaries ignored.
     */
+    var inputIndex = this._mapColumnIndex(index),
+        indices = Arr.neighbors(inputIndex, this._potentialRadius, this._inputDimensions, wrapAround),
+        numIndices = Math.floor(this._potentialPct * indices.length),
+        sampledIndices = _.sample(indices, numIndices);
 
-    var inputIndex = this._mapColumnIndex(index);
-
-    return Arr.neighbors(inputIndex, this._potentialRadius, this._inputDimensions, wrapAround);
+    return sampledIndices;
 };
 
 SpatialPooler.prototype._mapColumnIndex = function(index) {

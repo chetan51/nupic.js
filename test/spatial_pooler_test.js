@@ -187,6 +187,18 @@ describe('SpatialPooler', function() {
                 expectEqualSets(indices, [7, 8, 9, 0, 1]);
             });
 
+            it('should work with potentialPct < 1', function() {
+                sp = new SpatialPooler({
+                    columnDimensions: 4,
+                    inputDimensions: 10,
+                    potentialRadius: 2,
+                    potentialPct: 0.5
+                });
+
+                indices = sp._mapPotential(0, true);
+                expectEqualSets(indices, [0, 1]); // random seeded
+            });
+
         });
 
         describe('for 2-D columns and inputs', function() {
