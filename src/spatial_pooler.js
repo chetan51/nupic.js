@@ -46,7 +46,7 @@ var SpatialPooler = function(params) {
         stimulusThreshold: 0,
         synPermInactiveDec: 0.01,
         synPermActiveInc: 0.1,
-        synPermConnected: 0.10,
+        synPermConnected: 0.1,
         minPctOverlapDutyCycle: 0.001,
         minPctActiveDutyCycle: 0.001,
         dutyCyclePeriod: 1000,
