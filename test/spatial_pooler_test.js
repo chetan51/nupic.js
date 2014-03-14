@@ -23,8 +23,8 @@ describe('SpatialPooler', function() {
                     seed: -1,
                     spVerbosity: 0
                 },
-                numColumns = prod(defaults.columnDimensions),
-                numInputs = prod(defaults.inputDimensions),
+                numColumns = Arr.prod(defaults.columnDimensions),
+                numInputs = Arr.prod(defaults.inputDimensions),
                 iterationNum = 0,
                 iterationLearnNum = 0,
                 updatePeriod = 50,

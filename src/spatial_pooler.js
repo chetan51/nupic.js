@@ -187,8 +187,8 @@ var SpatialPooler = function(params) {
     // Verify input is valid
     var columnDimensions = toArray(params.columnDimensions),
         inputDimensions = toArray(params.inputDimensions),
-        numColumns = prod(columnDimensions),
-        numInputs = prod(inputDimensions);
+        numColumns = Arr.prod(columnDimensions),
+        numInputs = Arr.prod(inputDimensions);
 
     assert(numColumns > 0, "numColumns should be greater than 0");
     assert(numInputs > 0, "numInputs should be greater than 0");
