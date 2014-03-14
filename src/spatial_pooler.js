@@ -492,8 +492,9 @@ SpatialPooler.prototype._mapPotential = function(index, wrapAround) {
                     region boundaries ignored.
     */
 
-    var mask = [];
-    return mask;
+    var inputIndex = this._mapColumnIndex(index);
+
+    return Arr.neighbors(inputIndex, this._potentialRadius, this._inputDimensions, wrapAround);
 };
 
 SpatialPooler.prototype._mapColumnIndex = function(index) {
