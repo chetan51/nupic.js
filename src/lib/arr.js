@@ -198,3 +198,14 @@ Arr.neighbors = function(index, radius, dimensions, wrap) {
 
     return _.uniq(_.map(neighbors, pointToIndex(dimensions)));
 };
+
+/**
+ * Determine whether two arrays are equivalent when treated as sets.
+ *
+ * @param {Array} array1 First array.
+ * @param {Array} array2 Second array.
+ * @returns {Boolean} Returns true if array1 contains only and all elements in array2, otherwise false.
+ **/
+Arr.areEqualSets = function(array1, array2) {
+    return _.isEqual(array1.sort(), array2.sort());
+};
