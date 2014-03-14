@@ -51,7 +51,6 @@ var SpatialPooler = function(params) {
         minPctActiveDutyCycle: 0.001,
         dutyCyclePeriod: 1000,
         maxBoost: 10.0,
-        seed: -1,
         spVerbosity: 0
     };
     /*
@@ -176,7 +175,6 @@ var SpatialPooler = function(params) {
                           maxBoost is used if the duty cycle is 0, and any duty
                           cycle in between is linearly extrapolated from these
                           2 endpoints.
-    seed:                 Seed for our own pseudo-random number generator.
     spVerbosity:          spVerbosity level: 0, 1, 2, or 3
     */
 
@@ -231,9 +229,6 @@ var SpatialPooler = function(params) {
     this._version = 1.0;
     this._iterationNum = 0;
     this._iterationLearnNum = 0;
-
-    // Initialize the random number generator
-    Math.seedrandom(params.seed);
 };
 
 SpatialPooler.prototype.getNumColumns = function() {

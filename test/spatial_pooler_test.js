@@ -20,7 +20,6 @@ describe('SpatialPooler', function() {
                     minPctActiveDutyCycle: 0.001,
                     dutyCyclePeriod: 1000,
                     maxBoost: 10.0,
-                    seed: -1,
                     spVerbosity: 0
                 },
                 numColumns = Arr.prod(defaults.columnDimensions),
@@ -90,7 +89,6 @@ describe('SpatialPooler', function() {
                     minPctActiveDutyCycle: 0.002,
                     dutyCyclePeriod: 2000,
                     maxBoost: 20.0,
-                    seed: -2,
                     spVerbosity: 1,
                     iterationNum: 1,
                     iterationLearnNum: 2,
