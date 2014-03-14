@@ -505,11 +505,11 @@ SpatialPooler.prototype._mapColumnIndex = function(index) {
     uniformly. The return value is an integer representing the index of the
     input bit. Examples of the expected output of this method:
     * If the topology is one dimensional, and the column index is 0, this
-      method will return the input index 0. If the column index is 5, and there
-      are 10 columns over 50 inputs, this method will return the input index 25.
-    * If the topology is two dimensional, with column dimensions [10, 20] and
-      input dimensions [50, 100], and the column index is 100, the method
-      returns input index 2500.
+      method will return the input index 0. If the column index is 1, and there
+      are 3 columns over 7 inputs, this method will return the input index 3.
+    * If the topology is two dimensional, with column dimensions [3, 5] and
+      input dimensions [7, 11], and the column index is 3, the method
+      returns input index 8.
 
     Parameters:
     ----------------------------
