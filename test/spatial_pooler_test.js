@@ -171,7 +171,7 @@ describe('SpatialPooler', function() {
                     potentialRadius: 2,
                     potentialPct: 1
                 }),
-                mask;
+                potentials;
 
             it('should work without wrapAround', function() {
                 mask = sp._mapPotential(0, false);
@@ -199,8 +199,7 @@ describe('SpatialPooler', function() {
             var sp = new SpatialPooler({
                     columnDimensions: 4,
                     inputDimensions: 10
-                }),
-                mask;
+                });
 
             sp._mapColumnIndex(0).should.equal(0);
             sp._mapColumnIndex(1).should.equal(3);
@@ -212,8 +211,7 @@ describe('SpatialPooler', function() {
             var sp = new SpatialPooler({
                     columnDimensions: 4,
                     inputDimensions: 4
-                }),
-                mask;
+                });
 
             sp._mapColumnIndex(0).should.equal(0);
             sp._mapColumnIndex(1).should.equal(1);
@@ -225,8 +223,7 @@ describe('SpatialPooler', function() {
             var sp = new SpatialPooler({
                     columnDimensions: [12, 4],
                     inputDimensions: [20, 10]
-                }),
-                mask;
+                });
 
             sp._mapColumnIndex(0).should.equal(0);
             sp._mapColumnIndex(4).should.equal(10);
@@ -239,8 +236,7 @@ describe('SpatialPooler', function() {
             var sp = new SpatialPooler({
                     columnDimensions: [12, 2, 2],
                     inputDimensions: [20, 10]
-                }),
-                mask;
+                });
 
             sp._mapColumnIndex(0).should.equal(0);
             sp._mapColumnIndex(4).should.equal(10);
@@ -253,8 +249,7 @@ describe('SpatialPooler', function() {
             var sp = new SpatialPooler({
                     columnDimensions: [12, 4],
                     inputDimensions: [20, 5, 2]
-                }),
-                mask;
+                });
 
             sp._mapColumnIndex(0).should.equal(0);
             sp._mapColumnIndex(4).should.equal(10);
