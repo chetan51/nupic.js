@@ -175,18 +175,18 @@ describe('SpatialPooler', function() {
 
             it('should work without wrapAround', function() {
                 indices = sp._mapPotential(0, false);
-                indices.should.eql([0, 1, 2]);
+                Arr.areEqualSets(indices, [0, 1, 2]).should.equal(true);
 
                 indices = sp._mapPotential(2, false);
-                indices.should.eql([4, 5, 6, 7, 8]);
+                Arr.areEqualSets(indices, [4, 5, 6, 7, 8]).should.equal(true);
             });
 
             it('should work with wrapAround', function() {
                 indices = sp._mapPotential(0, true);
-                indices.should.eql([8, 9, 0, 1, 2]);
+                Arr.areEqualSets(indices, [8, 9, 0, 1, 2]).should.equal(true);
                 
                 indices = sp._mapPotential(3, true);
-                indices.should.eql([7, 8, 9, 0, 1]);
+                Arr.areEqualSets(indices, [7, 8, 9, 0, 1]).should.equal(true);
             });
 
         });
@@ -202,25 +202,25 @@ describe('SpatialPooler', function() {
 
             it('should work without wrapAround', function() {
                 indices = sp._mapPotential(0, false);
-                indices.should.eql([0, 10,
-                                    1, 11]);
+                Arr.areEqualSets(indices, [0, 10,
+                                           1, 11]).should.equal(true);
 
                 indices = sp._mapPotential(2, false);
-                indices.should.eql([5, 15,
-                                    6, 16,
-                                    7, 17]);
+                Arr.areEqualSets(indices, [5, 15,
+                                           6, 16,
+                                           7, 17]).should.equal(true);
             });
 
             it('should work with wrapAround', function() {
                 indices = sp._mapPotential(0, true);
-                indices.should.eql([49, 9, 19,
-                                    40, 0, 10,
-                                    41, 1, 11]);
+                Arr.areEqualSets(indices, [49, 9, 19,
+                                           40, 0, 10,
+                                           41, 1, 11]).should.equal(true);
                 
                 indices = sp._mapPotential(3, true);
-                indices.should.eql([48, 8, 18,
-                                    49, 9, 19,
-                                    40, 0, 10]);
+                Arr.areEqualSets(indices, [48, 8, 18,
+                                           49, 9, 19,
+                                           40, 0, 10]).should.equal(true);
             });
 
         });
@@ -236,18 +236,18 @@ describe('SpatialPooler', function() {
 
             it('should work without wrapAround', function() {
                 indices = sp._mapPotential(0, false);
-                indices.should.eql([0, 1]);
+                Arr.areEqualSets(indices, [0, 1]).should.equal(true);
 
                 indices = sp._mapPotential(2, false);
-                indices.should.eql([1, 2, 3]);
+                Arr.areEqualSets(indices, [1, 2, 3]).should.equal(true);
             });
 
             it('should work with wrapAround', function() {
                 indices = sp._mapPotential(0, true);
-                indices.should.eql([9, 0, 1]);
+                Arr.areEqualSets(indices, [9, 0, 1]).should.equal(true);
                 
                 indices = sp._mapPotential(7, true);
-                indices.should.eql([8, 9, 0]);
+                Arr.areEqualSets(indices, [8, 9, 0]).should.equal(true);
             });
 
         });
