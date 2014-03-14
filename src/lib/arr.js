@@ -32,23 +32,23 @@ var Arr = {};
  * @returns {Array} Returns a higher dimensional array with elements grouped together.
  **/
 Arr.group = function(array, numPerGroup) {
-  var result = [],
-      current = [];
-    
-  for (var i = 0; i < array.length; i++) {
-    if (i > 0 && i % numPerGroup === 0) {
-      result.push(current);
-      current = [];
+    var result = [],
+        current = [];
+        
+    for (var i = 0; i < array.length; i++) {
+        if (i > 0 && i % numPerGroup === 0) {
+            result.push(current);
+            current = [];
+        }
+
+        current.push(array[i]);
     }
 
-    current.push(array[i]);
-  }
+    if (current.length) {
+        result.push(current);
+    }
 
-  if (current.length) {
-    result.push(current);
-  }
-
-  return result;
+    return result;
 };
 
 /**
@@ -59,15 +59,15 @@ Arr.group = function(array, numPerGroup) {
  * @returns {Array} Returns the reshaped array.
  **/
 Arr.reshape = function(array, dimensions) {
-  var flattened = _.flatten(array),
-      result = flattened;
+    var flattened = _.flatten(array),
+        result = flattened;
 
-  for (var i = dimensions.length - 1; i >= 0; i--) {
-    var numPerGroup = dimensions[i];
-    result = Arr.group(result, numPerGroup);
-  }
+    for (var i = dimensions.length - 1; i >= 0; i--) {
+        var numPerGroup = dimensions[i];
+        result = Arr.group(result, numPerGroup);
+    }
 
-  return _.flatten(result, true);
+    return _.flatten(result, true);
 };
 
 /**
@@ -78,17 +78,17 @@ Arr.reshape = function(array, dimensions) {
  * @returns {Array} Returns the reduced dimensions.
  **/
 Arr.reduceDimensions = function(dimensions, numDimensions) {
-  var result = [];
+    var result = [];
 
-  for (var i = 0; i < numDimensions; i++) {
-    result.push(dimensions[i]);
-  }
+    for (var i = 0; i < numDimensions; i++) {
+        result.push(dimensions[i]);
+    }
 
-  for (var j = numDimensions; j < dimensions.length; j++) {
-    result[numDimensions - 1] *= dimensions[j];
-  }
+    for (var j = numDimensions; j < dimensions.length; j++) {
+        result[numDimensions - 1] *= dimensions[j];
+    }
 
-  return result;
+    return result;
 };
 
 /**
@@ -99,15 +99,15 @@ Arr.reduceDimensions = function(dimensions, numDimensions) {
  * @returns {Number} Returns the index into the space.
  **/
 Arr.pointToIndex = function(point, dimensions) {
-  var multiplier = 1,
-      index = 0;
+    var multiplier = 1,
+        index = 0;
 
-  for (var i = dimensions.length - 1; i >= 0; i--) {
-    index += multiplier * point[i];
-    multiplier *= dimensions[i];
-  }
+    for (var i = dimensions.length - 1; i >= 0; i--) {
+        index += multiplier * point[i];
+        multiplier *= dimensions[i];
+    }
 
-  return index;
+    return index;
 };
 
 /**
@@ -118,18 +118,18 @@ Arr.pointToIndex = function(point, dimensions) {
  * @returns {Array} Returns the point in the space represented by the index.
  **/
 Arr.indexToPoint = function(index, dimensions) {
-  var multiplier = Arr.prod(dimensions),
-      point = [];
+    var multiplier = Arr.prod(dimensions),
+        point = [];
 
-  for (var i = 0; i < dimensions.length; i++) {
-    multiplier /= dimensions[i];
+    for (var i = 0; i < dimensions.length; i++) {
+        multiplier /= dimensions[i];
 
-    var factor = Math.floor(index / multiplier);
-    point.push(factor);
-    index -= factor * multiplier;
-  }
+        var factor = Math.floor(index / multiplier);
+        point.push(factor);
+        index -= factor * multiplier;
+    }
 
-  return point;
+    return point;
 };
 
 /**
@@ -139,9 +139,62 @@ Arr.indexToPoint = function(index, dimensions) {
  * @returns {Number} Returns the product of all numbers in the array.
  **/
 Arr.prod = function(array) {
-  if (!array.length) return 0;
+    if (!array.length) return 0;
 
-  return _.reduce(array, function(p, n) {
-    return p * n;
-  });
+    return _.reduce(array, function(p, n) {
+        return p * n;
+    });
+};
+
+/**
+ * Return the neighboring indices of an index in an N-dimensional space.
+ *
+ * @param {Number} index Index of whose neighbors to return.
+ * @param {Number} radius Number of neighbors on each side of index to return.
+ * @param {Array} dimensions Dimensions of the space.
+ * @param {Boolean} wrap Enable wrapping around edges of the space.
+ * @returns {Array} Returns the neighboring indices of the index in the space.
+ **/
+Arr.neighbors = function(index, radius, dimensions, wrap) {
+    var point = Arr.indexToPoint(index, dimensions),
+        neighbors = [[]];
+
+    var mod = function(m, n) {
+            return ((m % n) + n) % n;
+        },
+        expand = function(pos, dimensionLength) {
+        return function(neighbor) {
+            var expansions = [],
+                maxRadius = wrap ? Math.ceil((dimensionLength - 1) / 2) : dimensionLength - 1,
+                effectiveRadius = Math.min(radius, maxRadius);
+
+            for (var j = pos - effectiveRadius; j <= pos + effectiveRadius; j++) {
+                var k = j;
+
+                if (j < 0 || j >= dimensionLength) {
+                    if (wrap) k = mod(j, dimensionLength);
+                    else continue;
+                }
+
+                var expansion = _.clone(neighbor);
+                expansion.unshift(k);
+                expansions.push(expansion);
+            }
+
+            return expansions;
+        };
+    };
+
+    for (var i = dimensions.length - 1; i >= 0; i--) {
+        neighbors = _.map(neighbors, expand(point[i], dimensions[i]));
+        neighbors = _.flatten(neighbors, true);
+    }
+
+    var pointToIndex = function(dimensions) {
+        return function(point) {
+            return Arr.pointToIndex(point, dimensions);
+        };
+    };
+
+    return _.uniq(_.map(neighbors, pointToIndex(dimensions)));
 };
