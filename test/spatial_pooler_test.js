@@ -9,6 +9,7 @@ describe('SpatialPooler', function() {
                     columnDimensions: [64,64],
                     potentialRadius: 16,
                     potentialPct: 0.5,
+                    wrapAround: true,
                     globalInhibition: false,
                     localAreaDensity: -1.0,
                     numActiveColumnsPerInhArea: 10.0,
@@ -34,6 +35,7 @@ describe('SpatialPooler', function() {
             sp.getNumInputs().should.equal(numInputs);
             sp.getPotentialRadius().should.equal(defaults.potentialRadius);
             sp.getPotentialPct().should.equal(defaults.potentialPct);
+            sp.getWrapAround().should.equal(defaults.wrapAround);
             sp.getGlobalInhibition().should.equal(defaults.globalInhibition);
             sp.getNumActiveColumnsPerInhArea().should.equal(defaults.numActiveColumnsPerInhArea);
             sp.getLocalAreaDensity().should.equal(defaults.localAreaDensity);
@@ -77,6 +79,7 @@ describe('SpatialPooler', function() {
                 params = {
                     potentialRadius: 8,
                     potentialPct: 0.25,
+                    wrapAround: false,
                     globalInhibition: true,
                     localAreaDensity: 0.2,
                     numActiveColumnsPerInhArea: 15.0,
@@ -102,6 +105,9 @@ describe('SpatialPooler', function() {
 
             sp.setPotentialPct(params.potentialPct);
             sp.getPotentialPct().should.equal(params.potentialPct);
+
+            sp.setWrapAround(params.wrapAround);
+            sp.getWrapAround().should.equal(params.wrapAround);
 
             sp.setGlobalInhibition(params.globalInhibition);
             sp.getGlobalInhibition().should.equal(params.globalInhibition);

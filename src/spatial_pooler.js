@@ -41,6 +41,7 @@ var SpatialPooler = function(params) {
         columnDimensions: [64,64],
         potentialRadius: 16,
         potentialPct: 0.5,
+        wrapAround: true,
         globalInhibition: false,
         localAreaDensity: -1.0,
         numActiveColumnsPerInhArea: 10.0,
@@ -89,6 +90,12 @@ var SpatialPooler = function(params) {
                           ((2*potentialRadius + 1)^(# inputDimensions) *
                           potentialPct) input bits to comprise the column's
                           potential pool.
+    wrapAround:           A boolean value indicating whether to consider columns at
+                          the border of a dimensions to be adjacent to columns at the
+                          other end of the dimension. For example, if the columns are
+                          laid out in one dimension, columns 1 and 10 will be
+                          considered adjacent if wrapAround is set to true:
+                          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     globalInhibition:     If true, then during inhibition phase the winning
                           columns are selected as the most active columns from
                           the region as a whole. Otherwise, the winning columns
@@ -204,6 +211,7 @@ var SpatialPooler = function(params) {
     this._inputDimensions = inputDimensions;
     this._potentialRadius = Math.min(params.potentialRadius, numInputs);
     this._potentialPct = params.potentialPct;
+    this._wrapAround = params.wrapAround;
     this._globalInhibition = params.globalInhibition;
     this._numActiveColumnsPerInhArea = params.numActiveColumnsPerInhArea;
     this._localAreaDensity = params.localAreaDensity;
@@ -260,6 +268,16 @@ SpatialPooler.prototype.getPotentialPct = function() {
 SpatialPooler.prototype.setPotentialPct = function(potentialPct) {
     /* Sets the potential percent */
     this._potentialPct = potentialPct;
+};
+
+SpatialPooler.prototype.getWrapAround = function() {
+    /* Returns whether wrap around is enabled */
+    return this._wrapAround;
+};
+
+SpatialPooler.prototype.setWrapAround = function(wrapAround) {
+    /* Sets wrap around */
+    this._wrapAround = wrapAround;
 };
 
 SpatialPooler.prototype.getGlobalInhibition = function() {
@@ -484,8 +502,9 @@ SpatialPooler.prototype._mapPotential = function(column, wrapAround) {
     ----------------------------
     column:         The index identifying a column in the permanence, potential
                     and connectivity matrices.
-    wrapAround:     A boolean value indicating that boundaries should be
-                    region boundaries ignored.
+    wrapAround:     A boolean value indicating whether to consider columns at
+                    the border of a dimensions to be adjacent to columns at the
+                    other end of the dimension.
     */
     var input = this._mapColumn(column),
         indices = Arr.neighbors(input, this._potentialRadius, this._inputDimensions, wrapAround),
