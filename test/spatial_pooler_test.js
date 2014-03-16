@@ -169,71 +169,81 @@ describe('SpatialPooler', function() {
     describe('mapPotential', function() {
 
         describe('for 1-D columns and inputs', function() {
-            var sp = new SpatialPooler({
+            var params = {
                     columnDimensions: 4,
                     inputDimensions: 10,
-                    potentialRadius: 2,
-                    potentialPct: 1
-                }),
+                    potentialRadius: 2
+                },
                 indices;
 
-            it('should work without wrapAround', function() {
-                indices = sp._mapPotential(0, false);
+            it('should work without wrapAround and potentialPct = 1', function() {
+                params.wrapAround = false;
+                params.potentialPct = 1;
+                var sp = new SpatialPooler(params);
+
+                indices = sp._mapPotential(0);
                 expectEqualSets(indices, [0, 1, 2]);
 
-                indices = sp._mapPotential(2, false);
+                indices = sp._mapPotential(2);
                 expectEqualSets(indices, [4, 5, 6, 7, 8]);
             });
 
-            it('should work with wrapAround', function() {
-                indices = sp._mapPotential(0, true);
+            it('should work with wrapAround and potentialPct = 1', function() {
+                params.wrapAround = true;
+                params.potentialPct = 1;
+                var sp = new SpatialPooler(params);
+
+                indices = sp._mapPotential(0);
                 expectEqualSets(indices, [8, 9, 0, 1, 2]);
                 
-                indices = sp._mapPotential(3, true);
+                indices = sp._mapPotential(3);
                 expectEqualSets(indices, [7, 8, 9, 0, 1]);
             });
 
             it('should work with potentialPct < 1', function() {
-                sp = new SpatialPooler({
-                    columnDimensions: 4,
-                    inputDimensions: 10,
-                    potentialRadius: 2,
-                    potentialPct: 0.5
-                });
+                params.wrapAround = true;
+                params.potentialPct = 0.5;
+                var sp = new SpatialPooler(params);
 
-                indices = sp._mapPotential(0, true);
+                indices = sp._mapPotential(0);
                 expectEqualSets(indices, [0, 1]); // random seeded
             });
 
         });
 
         describe('for 2-D columns and inputs', function() {
-            var sp = new SpatialPooler({
+            var params = {
                     columnDimensions: [2, 4],
                     inputDimensions: [5, 10],
                     potentialRadius: 1,
                     potentialPct: 1
-                }),
+                },
                 indices;
 
             it('should work without wrapAround', function() {
-                indices = sp._mapPotential(0, false);
+                params.wrapAround = false;
+                var sp = new SpatialPooler(params);
+
+                indices = sp._mapPotential(0);
                 expectEqualSets(indices, [0, 10,
                                     1, 11]);
 
-                indices = sp._mapPotential(2, false);
+                indices = sp._mapPotential(2);
                 expectEqualSets(indices, [5, 15,
                                     6, 16,
                                     7, 17]);
             });
 
             it('should work with wrapAround', function() {
-                indices = sp._mapPotential(0, true);
+                params.wrapAround = true;
+                var sp = new SpatialPooler(params);
+
+                indices = sp._mapPotential(0);
                 expectEqualSets(indices, [49, 9, 19,
                                     40, 0, 10,
                                     41, 1, 11]);
                 
-                indices = sp._mapPotential(3, true);
+                indices = sp._mapPotential(3);
                 expectEqualSets(indices, [48, 8, 18,
                                     49, 9, 19,
                                     40, 0, 10]);
@@ -242,27 +252,33 @@ describe('SpatialPooler', function() {
         });
 
         describe('for 2-D columns to 1-D inputs', function() {
-            var sp = new SpatialPooler({
+            var params = {
                     columnDimensions: [2, 4],
                     inputDimensions: 10,
                     potentialRadius: 1,
                     potentialPct: 1
-                }),
+                },
                 indices;
 
             it('should work without wrapAround', function() {
-                indices = sp._mapPotential(0, false);
+                params.wrapAround = false;
+                var sp = new SpatialPooler(params);
+
+                indices = sp._mapPotential(0);
                 expectEqualSets(indices, [0, 1]);
 
-                indices = sp._mapPotential(2, false);
+                indices = sp._mapPotential(2);
                 expectEqualSets(indices, [1, 2, 3]);
             });
 
             it('should work with wrapAround', function() {
-                indices = sp._mapPotential(0, true);
+                params.wrapAround = true;
+                var sp = new SpatialPooler(params);
+
+                indices = sp._mapPotential(0);
                 expectEqualSets(indices, [9, 0, 1]);
                 
-                indices = sp._mapPotential(7, true);
+                indices = sp._mapPotential(7);
                 expectEqualSets(indices, [8, 9, 0]);
             });
 

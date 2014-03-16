@@ -480,8 +480,7 @@ SpatialPooler.prototype.setMinPctActiveDutyCycles = function(minPctActiveDutyCyc
     this._minPctActiveDutyCycles = minPctActiveDutyCycles;
 };
 
-SpatialPooler.prototype._mapPotential = function(column, wrapAround) {
-    wrapAround = wrapAround || false;
+SpatialPooler.prototype._mapPotential = function(column) {
     /*
     Maps a column to its input bits. This method encapsultes the topology of
     the region. It takes the index of the column as an argument and determines
@@ -502,12 +501,9 @@ SpatialPooler.prototype._mapPotential = function(column, wrapAround) {
     ----------------------------
     column:         The index identifying a column in the permanence, potential
                     and connectivity matrices.
-    wrapAround:     A boolean value indicating whether to consider columns at
-                    the border of a dimensions to be adjacent to columns at the
-                    other end of the dimension.
     */
     var input = this._mapColumn(column),
-        indices = Arr.neighbors(input, this._potentialRadius, this._inputDimensions, wrapAround),
+        indices = Arr.neighbors(input, this._potentialRadius, this._inputDimensions, this._wrapAround),
         numIndices = Math.floor(this._potentialPct * indices.length),
         sampledIndices = _.sample(indices, numIndices);
 
