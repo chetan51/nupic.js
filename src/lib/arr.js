@@ -177,6 +177,23 @@ Arr.prod = function(array) {
 };
 
 /**
+ * Normalize all the values in an array.
+ *
+ * @param {Array} array An array filled with numbers.
+ * @param {Number} target The number that the max value of the array should become.
+ * @returns {Array} Returns the array with each value normalized so that the max value of the array is target.
+ **/
+Arr.normalize = function(array, target) {
+    var max = Math.max.apply(Math, array),
+        multiplier = target / max,
+        normalized = _.map(array, function(n) {
+            return n * multiplier;
+        });
+
+    return normalized;
+};
+
+/**
  * Return the neighboring indices of an index in an N-dimensional space.
  *
  * @param {Number} index Index of whose neighbors to return.
