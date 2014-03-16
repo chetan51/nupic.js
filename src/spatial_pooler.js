@@ -462,7 +462,7 @@ SpatialPooler.prototype.setMinPctActiveDutyCycles = function(minPctActiveDutyCyc
     this._minPctActiveDutyCycles = minPctActiveDutyCycles;
 };
 
-SpatialPooler.prototype._mapPotential = function(index, wrapAround) {
+SpatialPooler.prototype._mapPotential = function(column, wrapAround) {
     wrapAround = wrapAround || false;
     /*
     Maps a column to its input bits. This method encapsultes the topology of
@@ -482,20 +482,20 @@ SpatialPooler.prototype._mapPotential = function(index, wrapAround) {
 
     Parameters:
     ----------------------------
-    index:          The index identifying a column in the permanence, potential
+    column:         The index identifying a column in the permanence, potential
                     and connectivity matrices.
     wrapAround:     A boolean value indicating that boundaries should be
                     region boundaries ignored.
     */
-    var inputIndex = this._mapColumnIndex(index),
-        indices = Arr.neighbors(inputIndex, this._potentialRadius, this._inputDimensions, wrapAround),
+    var input = this._mapColumn(column),
+        indices = Arr.neighbors(input, this._potentialRadius, this._inputDimensions, wrapAround),
         numIndices = Math.floor(this._potentialPct * indices.length),
         sampledIndices = _.sample(indices, numIndices);
 
     return sampledIndices;
 };
 
-SpatialPooler.prototype._mapColumnIndex = function(index) {
+SpatialPooler.prototype._mapColumn = function(column) {
     /*
     Maps a column to its respective input index, keeping to the topology of
     the region. It takes the index of the column as an argument and determines
@@ -512,7 +512,7 @@ SpatialPooler.prototype._mapColumnIndex = function(index) {
 
     Parameters:
     ----------------------------
-    index:          The index identifying a column in the permanence, potential
+    column:         The index identifying a column in the permanence, potential
                     and connectivity matrices.
     */
 
@@ -521,7 +521,7 @@ SpatialPooler.prototype._mapColumnIndex = function(index) {
         minNumDimensions = Math.min(columnDimensions.length, inputDimensions.length),
         normColumnDimensions = Arr.reduceDimensions(columnDimensions, minNumDimensions),
         normInputDimensions = Arr.reduceDimensions(inputDimensions, minNumDimensions),
-        columnPoint = Arr.indexToPoint(index, normColumnDimensions),
+        columnPoint = Arr.indexToPoint(column, normColumnDimensions),
         ratios = _.map(columnPoint, function(p, i) {
           return p / (normColumnDimensions[i] - 1);
         });

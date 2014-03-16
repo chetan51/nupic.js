@@ -264,7 +264,7 @@ describe('SpatialPooler', function() {
 
     });
 
-    describe('mapColumnIndex', function() {
+    describe('mapColumn', function() {
 
         it('should work for 1D columns to 1D inputs', function() {
             var sp = new SpatialPooler({
@@ -272,10 +272,10 @@ describe('SpatialPooler', function() {
                     inputDimensions: 10
                 });
 
-            sp._mapColumnIndex(0).should.equal(0);
-            sp._mapColumnIndex(1).should.equal(3);
-            sp._mapColumnIndex(2).should.equal(6);
-            sp._mapColumnIndex(3).should.equal(9);
+            sp._mapColumn(0).should.equal(0);
+            sp._mapColumn(1).should.equal(3);
+            sp._mapColumn(2).should.equal(6);
+            sp._mapColumn(3).should.equal(9);
         });
 
         it('should work for 1D columns to 1D inputs of the same dimensions', function() {
@@ -284,10 +284,10 @@ describe('SpatialPooler', function() {
                     inputDimensions: 4
                 });
 
-            sp._mapColumnIndex(0).should.equal(0);
-            sp._mapColumnIndex(1).should.equal(1);
-            sp._mapColumnIndex(2).should.equal(2);
-            sp._mapColumnIndex(3).should.equal(3);
+            sp._mapColumn(0).should.equal(0);
+            sp._mapColumn(1).should.equal(1);
+            sp._mapColumn(2).should.equal(2);
+            sp._mapColumn(3).should.equal(3);
         });
 
         it('should work for 2D columns to 2D inputs', function() {
@@ -296,11 +296,11 @@ describe('SpatialPooler', function() {
                     inputDimensions: [20, 10]
                 });
 
-            sp._mapColumnIndex(0).should.equal(0);
-            sp._mapColumnIndex(4).should.equal(10);
-            sp._mapColumnIndex(5).should.equal(13);
-            sp._mapColumnIndex(7).should.equal(19);
-            sp._mapColumnIndex(47).should.equal(199);
+            sp._mapColumn(0).should.equal(0);
+            sp._mapColumn(4).should.equal(10);
+            sp._mapColumn(5).should.equal(13);
+            sp._mapColumn(7).should.equal(19);
+            sp._mapColumn(47).should.equal(199);
         });
 
         it('should work for 3D columns to 2D inputs', function() {
@@ -309,11 +309,11 @@ describe('SpatialPooler', function() {
                     inputDimensions: [20, 10]
                 });
 
-            sp._mapColumnIndex(0).should.equal(0);
-            sp._mapColumnIndex(4).should.equal(10);
-            sp._mapColumnIndex(5).should.equal(13);
-            sp._mapColumnIndex(7).should.equal(19);
-            sp._mapColumnIndex(47).should.equal(199);
+            sp._mapColumn(0).should.equal(0);
+            sp._mapColumn(4).should.equal(10);
+            sp._mapColumn(5).should.equal(13);
+            sp._mapColumn(7).should.equal(19);
+            sp._mapColumn(47).should.equal(199);
         });
 
         it('should work for 2D columns to 3D inputs', function() {
@@ -322,11 +322,11 @@ describe('SpatialPooler', function() {
                     inputDimensions: [20, 5, 2]
                 });
 
-            sp._mapColumnIndex(0).should.equal(0);
-            sp._mapColumnIndex(4).should.equal(10);
-            sp._mapColumnIndex(5).should.equal(13);
-            sp._mapColumnIndex(7).should.equal(19);
-            sp._mapColumnIndex(47).should.equal(199);
+            sp._mapColumn(0).should.equal(0);
+            sp._mapColumn(4).should.equal(10);
+            sp._mapColumn(5).should.equal(13);
+            sp._mapColumn(7).should.equal(19);
+            sp._mapColumn(47).should.equal(199);
         });
 
     });
