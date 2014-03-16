@@ -229,9 +229,6 @@ var SpatialPooler = function(params) {
     // Extra parameter settings
     this._synPermMin = 0.0;
     this._synPermMax = 1.0;
-    this._synPermTrimThreshold = this._synPermActiveInc / 2.0;
-    assert(this._synPermTrimThreshold < this._synPermConnected,
-           "synPermTrimThreshold should be less than synPermConnected");
     this._updatePeriod = 50;
 
     // Internal state
@@ -399,16 +396,6 @@ SpatialPooler.prototype.getUpdatePeriod = function() {
 SpatialPooler.prototype.setUpdatePeriod = function(updatePeriod) {
     /* Sets the update period */
     this._updatePeriod = updatePeriod;
-};
-
-SpatialPooler.prototype.getSynPermTrimThreshold = function() {
-    /* Returns the permanence trim threshold */
-    return this._synPermTrimThreshold;
-};
-
-SpatialPooler.prototype.setSynPermTrimThreshold = function(synPermTrimThreshold) {
-    /* Sets the permanence trim threshold */
-    this._synPermTrimThreshold = synPermTrimThreshold;
 };
 
 SpatialPooler.prototype.getSynPermActiveInc = function() {

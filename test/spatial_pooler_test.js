@@ -28,7 +28,6 @@ describe('SpatialPooler', function() {
                 iterationNum = 0,
                 iterationLearnNum = 0,
                 updatePeriod = 50,
-                synPermTrimThreshold = defaults.synPermActiveInc / 2.0,
                 synPermBelowStimulusInc = defaults.synPermConnected / 10.0;
             
             sp.getNumColumns().should.equal(numColumns);
@@ -47,7 +46,6 @@ describe('SpatialPooler', function() {
             sp.getIterationLearnNum().should.equal(iterationLearnNum);
             sp.getSpVerbosity().should.equal(defaults.spVerbosity);
             sp.getUpdatePeriod().should.equal(updatePeriod);
-            sp.getSynPermTrimThreshold().should.equal(synPermTrimThreshold);
             sp.getSynPermActiveInc().should.equal(defaults.synPermActiveInc);
             sp.getSynPermInactiveDec().should.equal(defaults.synPermInactiveDec);
             sp.getSynPermBelowStimulusInc().should.equal(synPermBelowStimulusInc);
@@ -96,7 +94,6 @@ describe('SpatialPooler', function() {
                     iterationNum: 1,
                     iterationLearnNum: 2,
                     updatePeriod: 10,
-                    synPermTrimThreshold: 0.2,
                     synPermBelowStimulusInc: 0.3
                 };
             
@@ -141,9 +138,6 @@ describe('SpatialPooler', function() {
 
             sp.setUpdatePeriod(params.updatePeriod);
             sp.getUpdatePeriod().should.equal(params.updatePeriod);
-
-            sp.setSynPermTrimThreshold(params.synPermTrimThreshold);
-            sp.getSynPermTrimThreshold().should.equal(params.synPermTrimThreshold);
 
             sp.setSynPermActiveInc(params.synPermActiveInc);
             sp.getSynPermActiveInc().should.equal(params.synPermActiveInc);
@@ -385,7 +379,6 @@ describe('SpatialPooler', function() {
 
             it('should work with synPermConnected = 0.05', function() {
                 params.synPermConnected = 0.05;
-                params.synPermActiveInc = 0.05;
                 var sp = new SpatialPooler(params),
                     permanences;
 

@@ -13,6 +13,7 @@
 - Mapping of column index to input space distributes columns over indices uniformly, rather than mapping adjacent columns to adjacent inputs.
 - Mapping of columns to their potential pools supports N-dimensional columns and K-dimensional inputs.
 - Permanences are initialized according to whitepaper description, keeping permanences in a small range around the connected threshold, with inputs closer to the column center likely having a higher initial permanence.
+- Not using "trimming" of low permanences to reduce memory requirement
 
 ## Todo
 
