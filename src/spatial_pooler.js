@@ -480,36 +480,6 @@ SpatialPooler.prototype.setMinPctActiveDutyCycles = function(minPctActiveDutyCyc
     this._minPctActiveDutyCycles = minPctActiveDutyCycles;
 };
 
-SpatialPooler.prototype._mapPotential = function(column) {
-    /*
-    Maps a column to its input bits. This method encapsultes the topology of
-    the region. It takes the index of the column as an argument and determines
-    what are the indices of the input vector that are located within the
-    column's potential pool. The return value is a list containing the indices
-    of the input bits. Examples of the expected output of this method:
-    * If the potentialRadius is greater than or equal to the entire input
-      space, (global visibility), then this method returns an array filled with
-      all the indices
-    * If the topology is one dimensional, and the potentialRadius is 5, this
-      method will return an array containing 5 consecutive values centered on
-      the index of the column (wrapping around if necessary).
-    * If the topology is two dimensional, and the potentialRadius is 5, the
-      method should return an array containing 25 indices, which are to be
-      determined by the mapping from 1-D index to 2-D position.
-
-    Parameters:
-    ----------------------------
-    column:         The index identifying a column in the permanence, potential
-                    and connectivity matrices.
-    */
-    var input = this._mapColumn(column),
-        indices = Arr.neighbors(input, this._potentialRadius, this._inputDimensions, this._wrapAround),
-        numIndices = Math.floor(this._potentialPct * indices.length),
-        sampledIndices = _.sample(indices, numIndices);
-
-    return sampledIndices;
-};
-
 SpatialPooler.prototype._mapColumn = function(column) {
     /*
     Maps a column to its respective input index, keeping to the topology of
@@ -545,4 +515,34 @@ SpatialPooler.prototype._mapColumn = function(column) {
         });
 
     return Arr.pointToIndex(inputPoint, normInputDimensions);
+};
+
+SpatialPooler.prototype._mapPotential = function(column) {
+    /*
+    Maps a column to its potential input bits. This method encapsulates the
+    topology of the region. It takes the index of the column as an argument
+    and determines what are the indices of the input vector that are located
+    within the column's potential pool. The return value is a list containing
+    the indices of the input bits. Examples of the expected output of this method:
+    * If the potentialRadius is greater than or equal to the entire input
+      space, (global visibility), then this method returns an array filled with
+      all the indices
+    * If the topology is one dimensional, and the potentialRadius is 5, this
+      method will return an array containing 5 consecutive values centered on
+      the index of the column (wrapping around if necessary).
+    * If the topology is two dimensional, and the potentialRadius is 5, the
+      method should return an array containing 25 indices, which are to be
+      determined by the mapping from 1-D index to 2-D position.
+
+    Parameters:
+    ----------------------------
+    column:         The index identifying a column in the permanence, potential
+                    and connectivity matrices.
+    */
+    var input = this._mapColumn(column),
+        indices = Arr.neighbors(input, this._potentialRadius, this._inputDimensions, this._wrapAround),
+        numIndices = Math.floor(this._potentialPct * indices.length),
+        sampledIndices = _.sample(indices, numIndices);
+
+    return sampledIndices;
 };
