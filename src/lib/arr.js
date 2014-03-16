@@ -133,9 +133,39 @@ Arr.indexToPoint = function(index, dimensions) {
 };
 
 /**
+ * Returns the Manhattan distance between two points in an N-dimensional space.
+ *
+ * @param {Array} point1 The first point.
+ * @param {Array} point2 The second point.
+ * @returns {Number} Returns the Manhattan distance between point1 and point2.
+ **/
+Arr.manhattanDistance = function(point1, point2) {
+    var diffs = _.map(point1, function(p1, i) {
+        var p2 = point2[i];
+        return Math.abs(p1 - p2);
+    });
+
+    return Arr.sum(diffs);
+};
+
+/**
+ * Return the sum of all numbers in an array.
+ *
+ * @param {Array} array An array filled with numbers.
+ * @returns {Number} Returns the sum of all numbers in the array.
+ **/
+Arr.sum = function(array) {
+    if (!array.length) return 0;
+
+    return _.reduce(array, function(p, n) {
+        return p + n;
+    });
+};
+
+/**
  * Return the product of all numbers in an array.
  *
- * @param {Array} array An array filled with numbers
+ * @param {Array} array An array filled with numbers.
  * @returns {Number} Returns the product of all numbers in the array.
  **/
 Arr.prod = function(array) {
