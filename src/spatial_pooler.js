@@ -555,6 +555,11 @@ SpatialPooler.prototype._initPermanences = function(column, potentialInputs) {
     bit at the particular index in the array, and the column represented by
     the 'column' parameter.
 
+    Follows the algorithm called 'ASP' in Evaluating Sparse Codes on
+    Handwritten Digits [1].
+
+    [1] http://link.springer.com/chapter/10.1007%2F978-3-319-03680-9_40
+
     Parameters:
     ----------------------------
     column:             The index of the column.
