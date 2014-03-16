@@ -546,3 +546,41 @@ SpatialPooler.prototype._mapPotential = function(column) {
 
     return sampledIndices;
 };
+
+SpatialPooler.prototype._initPermanences = function(column, potentialInputs) {
+    /*
+    Initializes the permanences of a column. The method returns a 1-D array
+    the size of the potential inputs, where each entry in the
+    array represents the initial permanence value between the potential input
+    bit at the particular index in the array, and the column represented by
+    the 'column' parameter.
+
+    Parameters:
+    ----------------------------
+    column:             The index of the column.
+    potentialInputs:    An array specifying the potential pool of the column.
+                        Permanence values will be generated for the input
+                        indices in this array.
+    */
+    var synPermConnected = this._synPermConnected,
+        synPermConnectedRadius = 0.1,
+        centerInputPoint = Arr.indexToPoint(this._mapColumn(column), this._inputDimensions),
+        inputDimensions = this._inputDimensions;
+
+    var calculateDistance = function(input) {
+        var inputPoint = Arr.indexToPoint(input, inputDimensions);
+            distance = Arr.manhattanDistance(inputPoint, centerInputPoint);
+
+        return distance;
+    };
+
+    var distances = _.map(potentialInputs, calculateDistance),
+        normDistances = Arr.normalize(distances, synPermConnectedRadius);
+        permanences = _.map(normDistances, function(distance) {
+            var permancence = synPermConnected + _.random(synPermConnectedRadius) - distance;
+
+            return Math.max(0, permancence);
+        });
+
+    return permanences;
+};
