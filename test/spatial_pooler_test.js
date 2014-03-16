@@ -205,8 +205,13 @@ describe('SpatialPooler', function() {
                 params.potentialPct = 0.5;
                 var sp = new SpatialPooler(params);
 
+                reseedRandom();
                 indices = sp._mapPotential(0);
-                expectEqualSets(indices, [0, 1]); // random seeded
+                expectEqualSets(indices, [0, 9]);
+
+                reseedRandom();
+                indices = sp._mapPotential(0);
+                expectEqualSets(indices, [0, 2]);
             });
 
         });
