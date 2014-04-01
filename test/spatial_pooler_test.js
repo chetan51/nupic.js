@@ -225,12 +225,12 @@ describe('SpatialPooler', function() {
 
                 indices = sp._mapPotential(0);
                 expectEqualSets(indices, [0, 10,
-                                    1, 11]);
+                                          1, 11]);
 
                 indices = sp._mapPotential(2);
                 expectEqualSets(indices, [5, 15,
-                                    6, 16,
-                                    7, 17]);
+                                          6, 16,
+                                          7, 17]);
             });
 
             it('should work with wrapAround', function() {
@@ -239,13 +239,13 @@ describe('SpatialPooler', function() {
 
                 indices = sp._mapPotential(0);
                 expectEqualSets(indices, [49, 9, 19,
-                                    40, 0, 10,
-                                    41, 1, 11]);
+                                          40, 0, 10,
+                                          41, 1, 11]);
                 
                 indices = sp._mapPotential(3);
                 expectEqualSets(indices, [48, 8, 18,
-                                    49, 9, 19,
-                                    40, 0, 10]);
+                                          49, 9, 19,
+                                          40, 0, 10]);
             });
 
         });
