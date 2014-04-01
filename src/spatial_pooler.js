@@ -527,10 +527,10 @@ SpatialPooler.prototype._mapPotential = function(column) {
     * If the potentialRadius is greater than or equal to the entire input
       space, (global visibility), then this method returns an array filled with
       all the indices
-    * If the topology is one dimensional, and the potentialRadius is 5, this
+    * If the topology is one dimensional, and the potentialRadius is 2, this
       method will return an array containing 5 consecutive values centered on
       the index of the column (wrapping around if necessary).
-    * If the topology is two dimensional, and the potentialRadius is 5, the
+    * If the topology is two dimensional, and the potentialRadius is 2, the
       method should return an array containing 25 indices, which are to be
       determined by the mapping from 1-D index to 2-D position.
 
