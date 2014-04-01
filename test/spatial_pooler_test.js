@@ -5,9 +5,9 @@ describe('SpatialPooler', function() {
         it('should set up default params', function() {
             var sp = new SpatialPooler(),
                 defaults = {
-                    inputDimensions: [32,32],
-                    columnDimensions: [64,64],
-                    potentialRadius: 16,
+                    inputDimensions: [16, 16],
+                    columnDimensions: [8, 8],
+                    potentialRadius: 4,
                     potentialPct: 0.5,
                     wrapAround: true,
                     globalInhibition: false,
@@ -156,6 +156,20 @@ describe('SpatialPooler', function() {
 
             sp.setMinPctActiveDutyCycles(params.minPctActiveDutyCycle);
             sp.getMinPctActiveDutyCycles().should.equal(params.minPctActiveDutyCycle);
+        });
+
+        it('should init potential', function() {
+            var sp = new SpatialPooler({
+                inputDimensions: [16, 16],
+                columnDimensions: [8, 8],
+                potentialRadius: 4,
+                potentialPct: 0.5,
+                wrapAround: true,
+            });
+
+            sp.getPotential(0).length.should.equal(40);
+            sp.getPotential(63).length.should.equal(40);
+            should.not.exist(sp.getPotential(64));
         });
 
     });

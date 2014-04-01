@@ -37,9 +37,9 @@
 */
 var SpatialPooler = function(params) {
     var defaults = {
-        inputDimensions: [32,32],
-        columnDimensions: [64,64],
-        potentialRadius: 16,
+        inputDimensions: [16, 16],
+        columnDimensions: [8, 8],
+        potentialRadius: 4,
         potentialPct: 0.5,
         wrapAround: true,
         globalInhibition: false,
@@ -235,6 +235,14 @@ var SpatialPooler = function(params) {
     this._version = 1.0;
     this._iterationNum = 0;
     this._iterationLearnNum = 0;
+
+    // Initialize the permanences for each column
+    this._potentialPools = [];
+
+    for (var i = 0; i < this._numColumns; i++) {
+        var potentialPool = this._mapPotential(i);
+        this._potentialPools.push(potentialPool);
+    }
 };
 
 SpatialPooler.prototype.getNumColumns = function() {
@@ -465,6 +473,11 @@ SpatialPooler.prototype.setMinPctActiveDutyCycles = function(minPctActiveDutyCyc
     /* Sets the minimum tolerated activity duty, given as percent of
     neighbors' activity duty cycle */
     this._minPctActiveDutyCycles = minPctActiveDutyCycles;
+};
+
+SpatialPooler.prototype.getPotential = function(column) {
+    /* Returns the potential mapping for a given column. */
+    return _.clone(this._potentialPools[column]);
 };
 
 SpatialPooler.prototype._mapColumn = function(column) {
