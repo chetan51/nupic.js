@@ -177,6 +177,26 @@ Arr.prod = function(array) {
 };
 
 /**
+ * Return the max of all numbers in an array.
+ *
+ * @param {Array} array An array filled with numbers.
+ * @returns {Number} Returns the max of all numbers in the array.
+ **/
+Arr.max = function(array) {
+    return Math.max.apply(Math, array);
+};
+
+/**
+ * Return the min of all numbers in an array.
+ *
+ * @param {Array} array An array filled with numbers.
+ * @returns {Number} Returns the min of all numbers in the array.
+ **/
+Arr.min = function(array) {
+    return Math.min.apply(Math, array);
+};
+
+/**
  * Normalize all the values in an array.
  *
  * @param {Array} array An array filled with numbers.
@@ -184,7 +204,7 @@ Arr.prod = function(array) {
  * @returns {Array} Returns the array with each value normalized so that the max value of the array is target.
  **/
 Arr.normalize = function(array, target) {
-    var max = Math.max.apply(Math, array),
+    var max = Arr.max(array),
         multiplier = target / max,
         normalized = _.map(array, function(n) {
             return n * multiplier;
