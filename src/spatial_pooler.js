@@ -489,6 +489,18 @@ SpatialPooler.prototype.getPermanences = function(column) {
     return _.clone(this._permanences[column]);
 };
 
+SpatialPooler.prototype.getConnectedSynapses = function(column) {
+    /* Returns the connected synapses for a given column. */
+    assert(column < this._numColumns, "column out of bounds");
+
+    var synPermConnected = this._synPermConnected,
+        permanences = this._permanences[column];
+
+    return _.filter(this._potentialPools[column], function(input, i) {
+        return permanences[i] > synPermConnected;
+    });
+};
+
 SpatialPooler.prototype._mapColumn = function(column) {
     /*
     Maps a column to its respective input index, keeping to the topology of

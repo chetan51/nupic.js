@@ -197,6 +197,26 @@ describe('SpatialPooler', function() {
             (minPermanence - synPermConnected > -0.1).should.equal(true);
         });
 
+        it('should init connected synapses', function() {
+            seedRandom(0);
+
+            var synPermConnected = 0.4,
+                sp = new SpatialPooler({
+                    inputDimensions: [16, 16],
+                    columnDimensions: [8, 8],
+                    potentialRadius: 4,
+                    potentialPct: 0.5,
+                    wrapAround: true,
+                    synPermConnected: synPermConnected
+                });
+
+            sp.getConnectedSynapses(0).length.should.equal(18);
+            sp.getConnectedSynapses(63).length.should.equal(20);
+            should.Throw(function() {
+                sp.getConnectedSynapses(64);
+            }, "column out of bounds");
+        });
+
     });
 
     describe('mapPotential', function() {
