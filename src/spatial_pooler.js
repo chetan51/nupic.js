@@ -238,10 +238,14 @@ var SpatialPooler = function(params) {
 
     // Initialize the permanences for each column
     this._potentialPools = [];
+    this._permanences = [];
 
     for (var i = 0; i < this._numColumns; i++) {
         var potentialPool = this._mapPotential(i);
         this._potentialPools.push(potentialPool);
+
+        var permanences = this._initPermanences(i, potentialPool);
+        this._permanences.push(permanences);
     }
 };
 
@@ -478,6 +482,11 @@ SpatialPooler.prototype.setMinPctActiveDutyCycles = function(minPctActiveDutyCyc
 SpatialPooler.prototype.getPotential = function(column) {
     /* Returns the potential mapping for a given column. */
     return _.clone(this._potentialPools[column]);
+};
+
+SpatialPooler.prototype.getPermanences = function(column) {
+    /* Returns the permanence values for a given column. */
+    return _.clone(this._permanences[column]);
 };
 
 SpatialPooler.prototype._mapColumn = function(column) {

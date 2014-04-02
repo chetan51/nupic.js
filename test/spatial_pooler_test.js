@@ -172,6 +172,31 @@ describe('SpatialPooler', function() {
             should.not.exist(sp.getPotential(64));
         });
 
+        it('should init permanences', function() {
+            reseedRandom();
+
+            var synPermConnected = 0.4,
+                sp = new SpatialPooler({
+                    inputDimensions: [16, 16],
+                    columnDimensions: [8, 8],
+                    potentialRadius: 4,
+                    potentialPct: 0.5,
+                    wrapAround: true,
+                    synPermConnected: synPermConnected
+                });
+
+            sp.getPermanences(0).length.should.equal(40);
+            sp.getPermanences(63).length.should.equal(40);
+            should.not.exist(sp.getPermanences(64));
+
+            var permanences = sp.getPermanences(0),
+                maxPermanence = _.max(permanences),
+                minPermanence = _.min(permanences);
+
+            (maxPermanence - synPermConnected < 0.1).should.equal(true);
+            (minPermanence - synPermConnected > -0.1).should.equal(true);
+        });
+
     });
 
     describe('mapPotential', function() {
