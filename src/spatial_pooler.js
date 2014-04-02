@@ -481,11 +481,15 @@ SpatialPooler.prototype.setMinPctActiveDutyCycles = function(minPctActiveDutyCyc
 
 SpatialPooler.prototype.getPotential = function(column) {
     /* Returns the potential mapping for a given column. */
+    assert(column < this._numColumns, "column out of bounds");
+    
     return _.clone(this._potentialPools[column]);
 };
 
 SpatialPooler.prototype.getPermanences = function(column) {
     /* Returns the permanence values for a given column. */
+    assert(column < this._numColumns, "column out of bounds");
+
     return _.clone(this._permanences[column]);
 };
 

@@ -169,7 +169,9 @@ describe('SpatialPooler', function() {
 
             sp.getPotential(0).length.should.equal(40);
             sp.getPotential(63).length.should.equal(40);
-            should.not.exist(sp.getPotential(64));
+            should.Throw(function() {
+                sp.getPotential(64);
+            }, "column out of bounds");
         });
 
         it('should init permanences', function() {
@@ -187,7 +189,9 @@ describe('SpatialPooler', function() {
 
             sp.getPermanences(0).length.should.equal(40);
             sp.getPermanences(63).length.should.equal(40);
-            should.not.exist(sp.getPermanences(64));
+            should.Throw(function() {
+                sp.getPermanences(64);
+            }, "column out of bounds");
 
             var permanences = sp.getPermanences(0),
                 maxPermanence = _.max(permanences),
