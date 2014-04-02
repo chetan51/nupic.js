@@ -173,7 +173,7 @@ describe('SpatialPooler', function() {
         });
 
         it('should init permanences', function() {
-            reseedRandom();
+            seedRandom(0);
 
             var synPermConnected = 0.4,
                 sp = new SpatialPooler({
@@ -238,11 +238,11 @@ describe('SpatialPooler', function() {
                 params.potentialPct = 0.5;
                 var sp = new SpatialPooler(params);
 
-                reseedRandom();
+                seedRandom(0);
                 indices = sp._mapPotential(0);
                 expectEqualSets(indices, [0, 9]);
 
-                reseedRandom();
+                seedRandom(1);
                 indices = sp._mapPotential(0);
                 expectEqualSets(indices, [0, 2]);
             });
@@ -407,11 +407,11 @@ describe('SpatialPooler', function() {
                 var sp = new SpatialPooler(params),
                     permanences;
 
-                reseedRandom();
+                seedRandom(2);
                 permanences = [0.13711843022150286, 0.17286876390682743, 0.14731631584363575, 0.16895395054235182, 0.18155181438922602, 0.163404809647339, 0.18920165530499405, 0.21629304586051373, 0.29712180126639753, 0.2684074648744276, 0.22533613437057318, 0.21261444418221195, 0.1585177153438725, 0.1984282816584751, 0.221567889323608, 0.19869231826025469, 0.11176709048653086];
                 sp._initPermanences(1, potentialInputs).should.eql(permanences);
 
-                reseedRandom();
+                seedRandom(3);
                 permanences = [0.17568531143538127, 0.17388858151827952, 0.22303335113014128, 0.22178552851633493, 0.2010314637049589, 0.21955289717232748, 0.2385676225739555, 0.19192169300275638, 0.28577493375272, 0.19959522627734758, 0.2672606258997287, 0.2405872213846217, 0.17049310408293167, 0.1523794682427948, 0.1645925257225792, 0.19940834802469937, 0.11972376166617457];
                 sp._initPermanences(1, potentialInputs).should.eql(permanences);
             });
@@ -421,11 +421,11 @@ describe('SpatialPooler', function() {
                 var sp = new SpatialPooler(params),
                     permanences;
 
-                reseedRandom();
+                seedRandom(4);
                 permanences = [0, 0.058430501314847325, 0.05901566978890305, 0.08169275079418306, 0.026617600716573625, 0.06002019710206459, 0.08181170420810457, 0.059531356957450585, 0.05788645845833487, 0.11108921847515214, 0.0640552363710386, 0.08537930642487773, 0.07758013187668893, 0.07972202234311865, 0, 0.04878019810796887, 0];
                 sp._initPermanences(1, potentialInputs).should.eql(permanences);
 
-                reseedRandom();
+                seedRandom(5);
                 permanences = [0.03975141500470744, 0, 0.07061847198954546, 0.0510995401315561, 0.08036316709207185, 0.0628020682287197, 0.08281056750334334, 0.10760512259466128, 0.13997566779004045, 0.061080177084957166, 0.09936062007762783, 0.04744733289817435, 0.013459834572290427, 0.06818079309672853, 0.06521898083726077, 0.03578137649917938, 0];
                 sp._initPermanences(1, potentialInputs).should.eql(permanences);
             });
