@@ -482,7 +482,7 @@ SpatialPooler.prototype.setMinPctActiveDutyCycles = function(minPctActiveDutyCyc
 SpatialPooler.prototype.getPotential = function(column) {
     /* Returns the potential mapping for a given column. */
     assert(column < this._numColumns, "column out of bounds");
-    
+
     return _.clone(this._potentialPools[column]);
 };
 
@@ -613,4 +613,22 @@ SpatialPooler.prototype._initPermanences = function(column, potentialInputs) {
         });
 
     return permanences;
+};
+
+SpatialPooler.prototype._computeInhibitionRadius = function() {
+    /*
+    Returns the computed inhibition radius. The inhibition radius is a measure
+    of the cube (or hypercube) of columns that each a column is "connected to"
+    on average. Since columns are are not connected to each other directly, we
+    determine this quantity by first figuring out how many *inputs* a column is
+    connected to, and then multiplying it by the total number of columns that
+    exist for each input. For multiple dimensions the aforementioned
+    calculations are averaged over all dimensions of inputs and columns. This
+    value is meaningless if global inhibition is enabled.
+    */
+    if (this._globalInhibition) {
+        return Math.round((Arr.max(this._columnDimensions) - 1) / 2);
+    }
+
+    return 0;
 };

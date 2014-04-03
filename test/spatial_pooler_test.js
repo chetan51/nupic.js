@@ -460,4 +460,47 @@ describe('SpatialPooler', function() {
 
     });
 
+    describe('computeInhibitionRadius', function() {
+        seedRandom(0);
+
+        describe('should work with global inhibition', function() {
+            var params = {
+                inputDimensions: [16, 16],
+                columnDimensions: [8, 8],
+                potentialRadius: 4,
+                potentialPct: 0.5,
+                wrapAround: true,
+                globalInhibition: true
+            };
+
+            it('should work with synPermConnected = 0.4', function() {
+                params.synPermConnected = 0.4;
+                var sp = new SpatialPooler(params);
+
+                sp._computeInhibitionRadius().should.equal(4);
+            });
+
+        });
+
+        describe('should work with local inhibition', function() {
+            var params = {
+                inputDimensions: [16, 16],
+                columnDimensions: [8, 8],
+                potentialRadius: 4,
+                potentialPct: 0.5,
+                wrapAround: true,
+                globalInhibition: false
+            };
+
+            it('should work with synPermConnected = 0.4', function() {
+                params.synPermConnected = 0.4;
+                var sp = new SpatialPooler(params);
+
+                sp._computeInhibitionRadius().should.equal(0); // TODO: implement this
+            });
+            
+        });
+
+    });
+
 });
