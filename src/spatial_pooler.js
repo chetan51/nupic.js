@@ -533,7 +533,7 @@ SpatialPooler.prototype._mapColumn = function(column) {
         normInputDimensions = Arr.reduceDimensions(inputDimensions, minNumDimensions),
         columnPoint = Arr.indexToPoint(column, normColumnDimensions),
         ratios = _.map(columnPoint, function(p, i) {
-          return p / Math.max(1, (normColumnDimensions[i] - 1));
+          return p / Math.max((normColumnDimensions[i] - 1), 1);
         });
         inputPoint = _.map(normInputDimensions, function(p, i) {
           return Math.floor((p - 1) * ratios[i]);
