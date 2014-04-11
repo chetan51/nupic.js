@@ -374,6 +374,15 @@ describe('SpatialPooler', function() {
             sp._mapColumn(3).should.equal(3);
         });
 
+        it('should work for 1D columns to 1D inputs with length 1 each', function() {
+            var sp = new SpatialPooler({
+                    columnDimensions: 1,
+                    inputDimensions: 1
+                });
+
+            sp._mapColumn(0).should.equal(0);
+        });
+
         it('should work for 2D columns to 2D inputs', function() {
             var sp = new SpatialPooler({
                     columnDimensions: [12, 4],
