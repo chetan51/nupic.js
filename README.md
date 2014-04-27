@@ -1,5 +1,7 @@
 # NuPIC port in JavaScript
 
+Note: This port is still in progress. Most core functionality is not yet there.
+
 ## Usage
 
 ### Running Tests
